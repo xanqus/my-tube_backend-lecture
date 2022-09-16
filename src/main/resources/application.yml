@@ -1,0 +1,38 @@
+server:
+  port: 8123
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+
+spring:
+  web:
+    resources:
+      static-locations:
+        - file:///C:\
+  servlet:
+    multipart:
+      maxFileSize: 1000MB
+      maxRequestSize: 1000MB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/my-tube_for-lecture?serverTimezone=Asia/Seoul
+    username: sbsst
+    password: sbs123414
+  jpa:
+    hibernate:
+      #ddl-auto: create #create update none
+    show-sql: true
+    format_sql: true
+    use_sql_comments: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
