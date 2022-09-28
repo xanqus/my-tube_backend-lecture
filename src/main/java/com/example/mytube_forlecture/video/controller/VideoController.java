@@ -1,6 +1,7 @@
 package com.example.mytube_forlecture.video.controller;
 
 import com.example.mytube_forlecture.fileSystem.service.FileSystemService;
+import com.example.mytube_forlecture.video.domain.Video;
 import com.example.mytube_forlecture.video.dto.VideoDto;
 import com.example.mytube_forlecture.video.service.VideoService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,12 @@ public class VideoController {
 
         videoService.uploadFiles(files, root, userId);
         return videoService.getVideos(userId);
+    }
+
+    @PatchMapping("/{videoId}")
+    public void updateVideo(@PathVariable("videoId") int videoId, @RequestBody Video video) {
+
+        this.videoService.updateVideo(videoId, video);
     }
 
 }

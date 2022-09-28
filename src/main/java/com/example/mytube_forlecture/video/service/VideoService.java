@@ -94,4 +94,20 @@ public class VideoService {
                 .collect(Collectors.toList());
         return collect;
     }
+
+    public void updateVideo(int videoId, Video video) {
+        Optional<Video> opVideo = videoRepository.findById(Long.valueOf(videoId));
+        if(opVideo.isPresent()) {
+            Video videoToUpdate = opVideo.get();
+            videoToUpdate.setTitle(video.getTitle());
+            videoToUpdate.setDescription(video.getDescription());
+            if(video.getIsPublic() != null) {
+                videoToUpdate.setIsPublic(video.getIsPublic());
+            }
+            if(video.getIsTemp()!=null) {
+                videoToUpdate.setIsTemp(video.getIsTemp());
+            }
+            videoRepository.save(videoToUpdate);
+        }
+    }
 }

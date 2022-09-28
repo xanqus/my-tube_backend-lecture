@@ -39,7 +39,7 @@ public class Video {
     @Column(columnDefinition = "tinyint(1) default(1)")
     private Boolean isTemp;
 
-    @Column(columnDefinition = "tinyint(1) default(1)")
+    @Column(columnDefinition = "tinyint(1) default(0)")
     private Boolean isPublic;
 
     @Column(columnDefinition = "integer default 0")
