@@ -18,9 +18,17 @@ public class VideoController {
     private final FileSystemService fileSystemService;
     private final VideoService videoService;
 
+
+    @GetMapping("/{videoId}")
+    public VideoDto getVideo(@PathVariable("videoId") Integer videoId) {
+        System.out.println("videoId: " + videoId);
+
+        return videoService.getVideo(videoId);
+    }
+
     @GetMapping("")
     public List<VideoDto> getVideos(@RequestParam("userId") Integer userId) {
-        System.out.println("userId: " + userId);
+
         return videoService.getVideos(userId);
     }
 

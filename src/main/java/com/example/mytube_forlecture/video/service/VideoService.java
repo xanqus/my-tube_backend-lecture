@@ -25,12 +25,13 @@ import java.util.stream.Collectors;
 public class VideoService {
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
-    public void uploadFiles(List<MultipartFile> files, String root, Integer userId) throws IOException{
+
+    public void uploadFiles(List<MultipartFile> files, String root, Integer userId) throws IOException {
         User user = userRepository.findById(Long.valueOf(userId)).get();
 
         List<Map<String, String>> fileList = new ArrayList<>();
 
-        for(int i = 0; i < files.size(); i++) {
+        for (int i = 0; i < files.size(); i++) {
             String originalFilename = files.get(i).getOriginalFilename();
             String ext = originalFilename.substring(originalFilename.lastIndexOf("."));
             String title = originalFilename.substring(0, originalFilename.lastIndexOf("."));
@@ -56,7 +57,7 @@ public class VideoService {
         }
 
         try {
-            for(int i = 0; i < files.size(); i++) {
+            for (int i = 0; i < files.size(); i++) {
                 String filepath = root + "\\" + fileList.get(i).get("changeFile");
                 String imageFilepath = root + "\\" + fileList.get(i).get("thumbnail");
 
@@ -67,12 +68,12 @@ public class VideoService {
                 BufferedImage bufferedImage = AWTUtil.toBufferedImage(picture);
                 ImageIO.write(bufferedImage, "png", new File(imageFilepath));
 
-                
+
             }
             System.out.println("파일 업로드 성공");
-        }catch(IllegalStateException | IOException e) {
+        } catch (IllegalStateException | IOException e) {
             System.out.println("파일 업로드 실패");
-            for(int i = 0; i < files.size();i++) {
+            for (int i = 0; i < files.size(); i++) {
                 new File(root + "\\" + fileList.get(i).get("changeFile")).delete();
             }
             e.printStackTrace();
@@ -84,7 +85,7 @@ public class VideoService {
 
     public List<VideoDto> getVideos(Integer userId) {
         User user = userRepository.findById(Long.valueOf(userId)).get();
-        List<Video> videos =  videoRepository.findByUser(user);
+        List<Video> videos = videoRepository.findByUser(user);
 
         List<VideoDto> collect = videos.stream()
                 .map(video -> {
@@ -97,17 +98,29 @@ public class VideoService {
 
     public void updateVideo(int videoId, Video video) {
         Optional<Video> opVideo = videoRepository.findById(Long.valueOf(videoId));
-        if(opVideo.isPresent()) {
+        if (opVideo.isPresent()) {
             Video videoToUpdate = opVideo.get();
             videoToUpdate.setTitle(video.getTitle());
             videoToUpdate.setDescription(video.getDescription());
-            if(video.getIsPublic() != null) {
+            if (video.getIsPublic() != null) {
                 videoToUpdate.setIsPublic(video.getIsPublic());
             }
-            if(video.getIsTemp()!=null) {
+            if (video.getIsTemp() != null) {
                 videoToUpdate.setIsTemp(video.getIsTemp());
             }
             videoRepository.save(videoToUpdate);
         }
     }
+
+    public VideoDto getVideo(Integer videoId) {
+        Optional<Video> optionalVideo = videoRepository.findById(Long.valueOf(videoId));
+        if (optionalVideo.isPresent()) {
+            Video video = optionalVideo.get();
+            VideoDto videoDto = new VideoDto(video);
+            return videoDto;
+        }
+        return null;
+    }
+
+
 }
