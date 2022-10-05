@@ -49,8 +49,6 @@ public class VideoController {
 
     @PatchMapping("/{videoId}")
     public void updateVideo(@PathVariable("videoId") int videoId, @RequestBody Video video) {
-
         this.videoService.updateVideo(videoId, video);
     }
-
 }

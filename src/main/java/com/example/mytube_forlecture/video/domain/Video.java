@@ -1,5 +1,6 @@
 package com.example.mytube_forlecture.video.domain;
 
+import com.example.mytube_forlecture.comment.domain.Comment;
 import com.example.mytube_forlecture.user.domain.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -57,5 +59,8 @@ public class Video {
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedDate;
+
+    @OneToMany(mappedBy = "video", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList;
 
 }
