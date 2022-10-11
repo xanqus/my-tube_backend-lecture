@@ -33,7 +33,7 @@ public class VideoController {
     }
 
     @PostMapping("")
-    public List<VideoDto> uploadsVideos(@RequestParam("files")List<MultipartFile> files, @RequestParam("userId") Integer userId) throws IOException {
+    public List<VideoDto> uploadsVideos(@RequestParam("files") List<MultipartFile> files, @RequestParam("userId") Integer userId) throws IOException {
 
         System.out.println("파일 입력 들어옴");
         System.out.println("files: " + files);
@@ -50,5 +50,10 @@ public class VideoController {
     @PatchMapping("/{videoId}")
     public void updateVideo(@PathVariable("videoId") int videoId, @RequestBody Video video) {
         this.videoService.updateVideo(videoId, video);
+    }
+
+    @PostMapping("/awsUploadTest")
+    public void awsUploadTest(@RequestParam("files") List<MultipartFile> files) throws IOException {
+        videoService.awsUploadTest(files);
     }
 }

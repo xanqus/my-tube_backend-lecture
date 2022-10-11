@@ -1,5 +1,7 @@
 package com.example.mytube_forlecture.video.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.mytube_forlecture.user.dao.UserRepository;
 import com.example.mytube_forlecture.user.domain.User;
 import com.example.mytube_forlecture.video.dao.VideoRepository;
@@ -10,6 +12,7 @@ import org.jcodec.api.FrameGrab;
 import org.jcodec.api.JCodecException;
 import org.jcodec.common.model.Picture;
 import org.jcodec.scale.AWTUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +28,11 @@ import java.util.stream.Collectors;
 public class VideoService {
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    private final AmazonS3 amazonS3;
 
     public void uploadFiles(List<MultipartFile> files, String root, Integer userId) throws IOException {
         User user = userRepository.findById(Long.valueOf(userId)).get();
@@ -123,4 +131,17 @@ public class VideoService {
     }
 
 
+    public void awsUploadTest(List<MultipartFile> files) throws IOException {
+        files.stream()
+                .forEach(file -> {
+                    String s3FileName = String.valueOf(UUID.randomUUID());
+                    ObjectMetadata objMeta = new ObjectMetadata();
+                    try {
+                        objMeta.setContentLength(file.getInputStream().available());
+                        amazonS3.putObject(bucket, s3FileName, file.getInputStream(), objMeta);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
 }
